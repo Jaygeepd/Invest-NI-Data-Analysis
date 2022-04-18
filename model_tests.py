@@ -6,6 +6,7 @@ hold out data for our data analysis
 import pandas as pd
 import numpy as np
 import classifiers
+import csv
 
 # File paths
 data_path = "Data/appended_data.csv"
@@ -37,6 +38,73 @@ def drop_column(col, testing_set):
     return new_set
 
 
+# Function to compare two csv files
+def compare_csv(control_path, test_path, starting_row, comp_value):
+    # Create a control list to test against
+    control_list = []
+    test_list = []
+    # Iterate through and add values to the control list
+    with open(control_path, newline='') as control:
+        reader = csv.reader(control, delimiter=',')
+        # Skip the header
+        next(reader, None)
+
+        # We want to skip a number of rows equal to our starting row value
+        skip_row = 0
+        for row in reader:
+            # If less than starting row, skip
+            if skip_row < starting_row:
+                skip_row += 1
+                continue
+            # Otherwise, begin adding to the control list - check which value
+            # we are comparing
+            if comp_value == "Mean Average":
+                if row[14] == "True":
+                    translate_val = "1"
+                else:
+                    translate_val = "0"
+            else:
+                if row[13] == "True":
+                    translate_val = "1"
+                else:
+                    translate_val = "0"
+            # Append to the control list
+            control_list.append(translate_val)
+        # Close the connection
+        control.close()
+
+    # Now load in our comparison csv
+    with open(test_path, newline='') as test_file:
+        reader = csv.reader(test_file, delimiter=',')
+
+        # Skip the header
+        next(reader, None)
+
+        # Iterate through the rest of the list
+        for row in reader:
+            # Append the second value to the list
+            test_list.append(row[1])
+
+        # Close connection
+        test_file.close()
+
+    # Value to track our successes
+    success = 0
+
+    # Iterate through and compare the values
+    for comp_value in range(len(test_list)):
+        # Compare the two and see if they match
+        if test_list[comp_value] == control_list[comp_value]:
+            # Iterate the success counter
+            success += 1
+
+    # Calculate success rate
+    success_rate = success / len(test_list)
+
+    # Return the success rate
+    return success_rate
+
+
 # Function to run our tests
 if __name__ == '__main__':
     # Get our grid searches from classifier
@@ -61,3 +129,21 @@ if __name__ == '__main__':
         to_csv(zero_removed_test_path)
     pd.DataFrame({'Business Plan Grade': business_grade_pred})\
         .to_csv(business_grade_test_path)
+
+    # Compare our CSVs and return the score
+    print("Testing Mean Average Grades:")
+    avg_grade_results = compare_csv(data_path, avg_grade_test_path,
+                                    6500, "Mean Average")
+    print("Success Rate: " + str(avg_grade_results))
+
+    print("\n\nTesting Zero Removed Mean Average Grades:")
+    zero_removed_results = compare_csv(zero_removed_path,
+                                       zero_removed_test_path,
+                                       6000, "Mean Average")
+    print("Success Rate: " + str(zero_removed_results))
+
+    print("\n\nTesting Business Grades:")
+    business_grade_results = compare_csv(data_path, business_grade_test_path,
+                                         6500, "Business Grade")
+    print("Success Rate: " + str(business_grade_results))
+
