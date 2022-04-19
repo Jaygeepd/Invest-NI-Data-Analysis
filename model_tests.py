@@ -88,7 +88,7 @@ def compare_csv(control_path, test_path, starting_row, comp_value):
         # Close connection
         test_file.close()
 
-    # Value to track our successes
+    # Value to track our the values needed for accuracy
     success = 0
 
     # Iterate through and compare the values

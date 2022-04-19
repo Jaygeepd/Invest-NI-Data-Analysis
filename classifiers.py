@@ -39,7 +39,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from xgboost.sklearn import XGBClassifier
 
@@ -215,14 +214,11 @@ if __name__ == '__main__':
     business_grade_grid = business_plan_classifier()
 
     # Output the scores for each and print the best features
-    print("\n\nAverage Grade Grid Search\nBest Score: {}\nBest "
-          "Features: {}".format(avg_grade_grid.best_score_,
-                                avg_grade_grid.feature_names_in_))
+    print("\n\nAverage Grade Grid Search\nBest Score: {}"
+          .format(avg_grade_grid.best_score_))
 
-    print("\n\nNon-Zero Grade Grid Search\nBest Score: {}\nBest "
-          "Features: {}".format(non_zero_grid.best_score_,
-                                non_zero_grid.feature_names_in_))
+    print("\n\nNon-Zero Grade Grid Search\nBest Score: {}"
+          .format(non_zero_grid.best_score_))
 
-    print("\n\nAverage Grade Grid Search\nBest Score: {}\nBest "
-          "Features: {}".format(business_grade_grid.best_score_,
-                                business_grade_grid.feature_names_in_))
+    print("\n\nBusiness Grade Grid Search\nBest Score: {}"
+          .format(business_grade_grid.best_score_))

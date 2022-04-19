@@ -96,12 +96,12 @@ def average_mean_watermark(data_list, average):
 def business_estimation_watermark(data_list):
     # Iterate through the list and see which investments are below
     for entry in data_list:
-        business_value = "True"
+        business_value = "False"
         # Check this entry's investment
         if float(entry["Total Assistance"]) * 6 < \
                 float(entry["Total Investment"]):
             # This is above the advertised value from 5 year business plan
-            business_value = "False"
+            business_value = "True"
         # Update this entry
         entry["Business Value"] = business_value
 
@@ -128,6 +128,7 @@ if __name__ == '__main__':
     print("\nAverage Investment Grade not including Zero-Gainers Across " +
           str(len(gain_list)) + " investments: "
                                                         "" + str(non_zero_avg))
+    print("\n\n\n")
 
     # Copy the data list into the append list and run it through the functions
     append_list = invest_list.copy()

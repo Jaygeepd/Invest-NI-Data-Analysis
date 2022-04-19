@@ -156,4 +156,3 @@ def append_data(data_list, file_path, overwrite=False):
 if __name__ == '__main__':
     invest_data_retrieve("Data/invest_ni.csv", True)
 
-
